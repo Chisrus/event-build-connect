@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, MapPin } from "lucide-react";
 import heroImage from "@/assets/hero-bg.jpg";
-import logo from "@/assets/logo.png";
 
 export const Hero = () => {
   return (
@@ -18,17 +17,10 @@ export const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="container relative z-10 px-4 py-20 animate-fade-in">
+      <div className="container relative z-10 px-4 py-20 mt-20 animate-fade-in">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <div className="flex justify-center mb-6">
-            <img 
-              src={logo} 
-              alt="HM. BUILDING EVENT Logo" 
-              className="w-48 h-48 md:w-64 md:h-64 object-contain animate-fade-in"
-            />
-          </div>
           <h1 className="font-display text-5xl md:text-7xl font-bold text-primary-foreground leading-tight">
-            HM. BUILDING EVENT
+            Location de Matériel Professionnel
           </h1>
           <p className="text-xl md:text-2xl text-primary-foreground/90 max-w-2xl mx-auto">
             Votre plateforme de location de matériel événementiel et de construction. 
