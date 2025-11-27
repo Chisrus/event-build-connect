@@ -50,21 +50,6 @@ export const Hero = () => {
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16 pt-8">
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-accent">500+</div>
-              <div className="text-primary-foreground/80 mt-1">Équipements</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-accent">50+</div>
-              <div className="text-primary-foreground/80 mt-1">Partenaires</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-accent">1000+</div>
-              <div className="text-primary-foreground/80 mt-1">Clients satisfaits</div>
-            </div>
-          </div>
         </div>
       </div>
 

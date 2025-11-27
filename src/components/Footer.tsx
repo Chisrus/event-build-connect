@@ -73,24 +73,6 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
-          <div className="space-y-4">
-            <h4 className="font-semibold text-lg">Contact</h4>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-primary-foreground/80">
-                <Phone className="h-5 w-5 text-accent" />
-                <span>+33 1 23 45 67 89</span>
-              </div>
-              <div className="flex items-center gap-3 text-primary-foreground/80">
-                <Mail className="h-5 w-5 text-accent" />
-                <span>contact@hmbuilding.fr</span>
-              </div>
-              <div className="flex items-center gap-3 text-primary-foreground/80">
-                <MapPin className="h-5 w-5 text-accent" />
-                <span>Paris, France</span>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Bottom Bar */}
