@@ -1,5 +1,6 @@
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.png";
 
 export const Footer = () => {
   return (
@@ -8,7 +9,11 @@ export const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="font-display text-2xl font-bold">HM. BUILDING EVENT</h3>
+            <img 
+              src={logo} 
+              alt="HM. BUILDING EVENT Logo" 
+              className="w-32 h-32 object-contain mb-4"
+            />
             <p className="text-primary-foreground/80">
               Votre partenaire de confiance pour la location de matériel événementiel et de construction.
             </p>
