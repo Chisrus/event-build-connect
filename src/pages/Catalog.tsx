@@ -28,9 +28,9 @@ const Catalog = () => {
     }, []);
 
     const filteredProducts = products.filter(p =>
-        p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.description.toLowerCase().includes(searchTerm.toLowerCase())
+        (p.title?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+        (p.category?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+        (p.description?.toLowerCase() || "").includes(searchTerm.toLowerCase())
     );
 
     return (
