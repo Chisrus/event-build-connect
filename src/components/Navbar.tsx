@@ -30,7 +30,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
       <nav className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo + Name */}
@@ -40,16 +40,16 @@ export const Navbar = () => {
               alt="HM. BUILDING EVENT"
               className="w-16 h-16 object-contain transition-transform duration-300 group-hover:scale-110"
             />
-            <div className="hidden md:block">
-              <h2 className="font-display text-xl font-bold text-foreground leading-tight">
+            <div className="hidden sm:block">
+              <h2 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight">
                 HM. BUILDING EVENT
               </h2>
-              <p className="text-xs text-muted-foreground">Location de matériel</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground">Location de matériel</p>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden xl:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -74,7 +74,7 @@ export const Navbar = () => {
             </Button>
 
             {user ? (
-              <div className="hidden lg:flex items-center gap-2">
+              <div className="hidden xl:flex items-center gap-2">
                 <Button variant="outline" className="flex">
                   <User className="h-4 w-4 mr-2" />
                   Profil
@@ -84,7 +84,7 @@ export const Navbar = () => {
                 </Button>
               </div>
             ) : (
-              <div className="hidden lg:flex items-center gap-2">
+              <div className="hidden xl:flex items-center gap-2">
                 <Link to="/login">
                   <Button variant="outline">
                     Connexion
@@ -98,7 +98,7 @@ export const Navbar = () => {
               </div>
             )}
 
-            <div className="lg:hidden flex items-center gap-2">
+            <div className="xl:hidden flex items-center gap-2">
               <Button variant="ghost" size="icon" onClick={handleCartClick}>
                 <ShoppingCart className="h-5 w-5" />
               </Button>

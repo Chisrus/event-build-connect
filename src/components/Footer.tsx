@@ -6,9 +6,10 @@ import { toast } from "sonner";
 
 export const Footer = () => {
   return (
-    <footer id="contact" className="bg-primary text-primary-foreground">
-      <div className="container px-4 py-12">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+    <footer id="contact" className="bg-primary text-primary-foreground relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-foreground/20 to-transparent"></div>
+      <div className="container px-4 py-24 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="space-y-4">
             <img

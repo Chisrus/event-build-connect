@@ -83,11 +83,29 @@ export default {
         "fade-in": {
           from: {
             opacity: "0",
-            transform: "translateY(20px)",
+            transform: "translateY(10px)",
           },
           to: {
             opacity: "1",
             transform: "translateY(0)",
+          },
+        },
+        "fade-in-up": {
+          from: {
+            opacity: "0",
+            transform: "translateY(30px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "subtle-zoom": {
+          "0%": {
+            transform: "scale(1)",
+          },
+          "100%": {
+            transform: "scale(1.1)",
           },
         },
         "slide-in": {
@@ -104,7 +122,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.6s ease-out",
+        "fade-in": "fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+        "fade-in-up": "fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1)",
+        "subtle-zoom": "subtle-zoom 20s linear infinite alternate",
         "slide-in": "slide-in 0.5s ease-out",
       },
       fontFamily: {

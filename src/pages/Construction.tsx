@@ -11,13 +11,19 @@ const Construction = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const { data, error } = await supabase
-                .from('products')
-                .select('*')
-                .eq('category', 'construction');
+            try {
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .eq('category', 'construction');
 
-            if (data) setProducts(data);
-            setLoading(false);
+                if (error) throw error;
+                if (data) setProducts(data);
+            } catch (err) {
+                console.error("Error fetching construction products:", err);
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchProducts();
@@ -26,7 +32,7 @@ const Construction = () => {
     return (
         <div className="min-h-screen bg-background">
             <Navbar />
-            <div className="container mx-auto px-4 py-24">
+            <div className="container mx-auto px-4 py-32">
                 <div className="mb-12 animate-fade-in">
                     <h1 className="text-4xl md:text-5xl font-bold font-display mb-4">Matériel de Construction</h1>
                     <p className="text-muted-foreground text-lg max-w-2xl">
@@ -34,7 +40,7 @@ const Construction = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
                     {loading ? (
                         [1, 2, 3, 4].map((i) => (
                             <div key={i} className="space-y-4">

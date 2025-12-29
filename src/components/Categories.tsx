@@ -23,38 +23,48 @@ export const Categories = () => {
   ];
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-32 bg-background relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
+
       <div className="container px-4">
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Nos Catégories
+        <div className="text-center mb-20 animate-fade-in">
+          <h2 className="text-balance font-display text-4xl md:text-6xl font-black text-foreground mb-6">
+            Explorez par <span className="text-accent italic">Univers</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Découvrez notre large gamme d'équipements pour tous vos besoins
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-medium">
+            Une sélection rigoureuse d'équipements pour propulser vos projets vers l'excellence.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
           {categories.map((category, index) => (
             <div
               key={category.title}
-              className="group bg-card rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-border hover:border-primary/20 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="group relative bg-card rounded-[2.5rem] p-10 border border-border hover:border-accent/30 transition-all duration-500 premium-shadow hover:shadow-2xl overflow-hidden animate-fade-in"
+              style={{ animationDelay: `${index * 0.15}s` }}
             >
-              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${category.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                <category.icon className={`h-8 w-8 ${category.iconColor}`} />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-accent/10 to-transparent rounded-bl-[100%] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+              <div className="relative z-10">
+                <div className={`w-20 h-20 rounded-3xl bg-gradient-to-br ${category.color} flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}>
+                  <category.icon className={`h-10 w-10 ${category.iconColor}`} />
+                </div>
+                <h3 className="font-display text-3xl font-black text-foreground mb-4">
+                  {category.title}
+                </h3>
+                <p className="text-muted-foreground text-lg leading-relaxed mb-8 max-w-sm">
+                  {category.description}
+                </p>
+                <Link to={category.path}>
+                  <Button variant="outline" className="h-12 px-8 rounded-full border-2 border-primary/10 hover:border-accent hover:bg-accent hover:text-white transition-all duration-300 font-bold tracking-wide">
+                    Découvrir le matériel
+                  </Button>
+                </Link>
               </div>
-              <h3 className="font-display text-2xl font-bold text-foreground mb-3">
-                {category.title}
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                {category.description}
-              </p>
-              <Link to={category.path}>
-                <Button variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                  Explorer
-                </Button>
-              </Link>
+
+              <div className="absolute bottom-8 right-8 text-6xl font-black text-primary/5 opacity-0 group-hover:opacity-10 group-hover:-translate-y-2 transition-all duration-700 pointer-events-none uppercase italic">
+                {category.title.split(' ')[0]}
+              </div>
             </div>
           ))}
         </div>

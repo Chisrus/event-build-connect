@@ -42,7 +42,7 @@ const Catalog = () => {
     return (
         <div className="min-h-screen bg-background">
             <Navbar />
-            <div className="container mx-auto px-4 py-24">
+            <div className="container mx-auto px-4 py-32">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                     <div className="animate-fade-in">
                         <h1 className="text-4xl md:text-5xl font-bold font-display mb-4">Catalogue Complet</h1>
@@ -60,7 +60,7 @@ const Catalog = () => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
                     {loading ? (
                         [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                             <div key={i} className="space-y-4">

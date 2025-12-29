@@ -20,38 +20,41 @@ export const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-32 bg-background relative overflow-hidden">
       <div className="container px-4">
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Comment Ça Marche
+        <div className="text-center mb-24 animate-fade-in">
+          <h2 className="text-balance font-display text-4xl md:text-6xl font-black text-foreground mb-6">
+            Votre Succès en <span className="text-accent italic">3 Temps</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Trois étapes simples pour louer votre matériel
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-medium">
+            Une expérience de location pensée pour l'efficacité et la sérénité.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-16 lg:gap-24 max-w-6xl mx-auto relative">
+          {/* Decorative path for desktop */}
+          <div className="hidden lg:block absolute top-[60px] left-[15%] right-[15%] h-1 bg-gradient-to-r from-accent/20 via-accent to-accent/20 rounded-full blur-[1px]"></div>
+
           {steps.map((step, index) => (
             <div
               key={step.title}
-              className="relative text-center space-y-4 animate-fade-in"
-              style={{ animationDelay: `${index * 0.15}s` }}
+              className="group relative text-center space-y-8 animate-fade-in"
+              style={{ animationDelay: `${index * 0.2}s` }}
             >
-              {/* Connector Line */}
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-primary to-accent"></div>
-              )}
-              
-              <div className="relative inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-primary via-primary to-accent mx-auto shadow-lg">
-                <step.icon className="h-10 w-10 text-primary-foreground" />
+              <div className="relative inline-flex items-center justify-center w-32 h-32 rounded-[2.5rem] bg-white dark:bg-card premium-shadow group-hover:scale-110 group-hover:-rotate-3 transition-all duration-700 animate-fade-in">
+                <div className="absolute -top-4 -right-4 w-12 h-12 rounded-full bg-accent text-white flex items-center justify-center text-xl font-black shadow-lg shadow-accent/40 group-hover:scale-110 transition-transform">
+                  {index + 1}
+                </div>
+                <step.icon className="h-12 w-12 text-primary group-hover:text-accent transition-colors duration-500" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-foreground">
-                {step.title}
-              </h3>
-              <p className="text-muted-foreground">
-                {step.description}
-              </p>
+              <div className="space-y-4">
+                <h3 className="font-display text-3xl font-black text-foreground group-hover:text-accent transition-colors">
+                  {step.title.split('. ')[1]}
+                </h3>
+                <p className="text-muted-foreground text-lg leading-relaxed font-medium">
+                  {step.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
