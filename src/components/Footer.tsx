@@ -1,10 +1,12 @@
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export const Footer = () => {
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer id="contact" className="bg-primary text-primary-foreground">
       <div className="container px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
@@ -24,22 +26,22 @@ export const Footer = () => {
             <h4 className="font-semibold text-lg">Liens Rapides</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <Link to="/catalog" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Catalogue
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <Link to="/event" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Événementiel
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <Link to="/construction" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Construction
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#partners" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Nos Partenaires
                 </a>
               </li>
@@ -51,22 +53,31 @@ export const Footer = () => {
             <h4 className="font-semibold text-lg">Support</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <button
+                  onClick={() => toast.info("Le centre d'aide sera bientôt disponible.")}
+                  className="text-primary-foreground/80 hover:text-accent transition-colors text-left"
+                >
                   Centre d'aide
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <button
+                  onClick={() => toast.info("Les Conditions Générales de Vente seront bientôt disponibles.")}
+                  className="text-primary-foreground/80 hover:text-accent transition-colors text-left"
+                >
                   CGV
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <button
+                  onClick={() => toast.info("La politique de confidentialité sera bientôt disponible.")}
+                  className="text-primary-foreground/80 hover:text-accent transition-colors text-left"
+                >
                   Politique de confidentialité
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#contact" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Contact
                 </a>
               </li>

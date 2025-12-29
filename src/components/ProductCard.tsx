@@ -13,8 +13,14 @@ interface Product {
     description: string;
 }
 
+import { toast } from "sonner";
+
 export const ProductCard = ({ product }: { product: Product }) => {
     const formattedPrice = new Intl.NumberFormat('fr-FR').format(product.price);
+
+    const handleAction = () => {
+        toast.info("Cette fonctionnalité de réservation sera bientôt disponible avec paiement sécurisé !");
+    };
 
     return (
         <Card className="group overflow-hidden border-border hover:border-primary/50 transition-all duration-500 hover:shadow-2xl bg-card animate-fade-in">
@@ -25,10 +31,19 @@ export const ProductCard = ({ product }: { product: Product }) => {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                    <Button size="icon" variant="secondary" className="rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 delay-75">
+                    <Button
+                        size="icon"
+                        variant="secondary"
+                        className="rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 delay-75"
+                        onClick={handleAction}
+                    >
                         <Eye className="h-5 w-5" />
                     </Button>
-                    <Button size="icon" className="rounded-full bg-primary scale-0 group-hover:scale-100 transition-transform duration-300 delay-150">
+                    <Button
+                        size="icon"
+                        className="rounded-full bg-primary scale-0 group-hover:scale-100 transition-transform duration-300 delay-150"
+                        onClick={handleAction}
+                    >
                         <ShoppingCart className="h-5 w-5" />
                     </Button>
                 </div>
@@ -49,7 +64,10 @@ export const ProductCard = ({ product }: { product: Product }) => {
                 </div>
             </CardContent>
             <CardFooter className="p-5 pt-0">
-                <Button className="w-full bg-secondary hover:bg-primary transition-all duration-300 text-secondary-foreground hover:text-primary-foreground font-bold py-6">
+                <Button
+                    className="w-full bg-secondary hover:bg-primary transition-all duration-300 text-secondary-foreground hover:text-primary-foreground font-bold py-6"
+                    onClick={handleAction}
+                >
                     Réserver maintenant
                 </Button>
             </CardFooter>

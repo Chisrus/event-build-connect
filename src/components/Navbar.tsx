@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 
 export const Navbar = () => {
   const { user, signOut } = useAuth();
@@ -12,7 +13,12 @@ export const Navbar = () => {
 
   const handleSignOut = async () => {
     await signOut();
+    toast.success("Déconnexion réussie");
     navigate("/");
+  };
+
+  const handleCartClick = () => {
+    toast.info("Le panier sera disponible prochainement !");
   };
 
   const navLinks = [
@@ -63,7 +69,7 @@ export const Navbar = () => {
                 Publier une annonce
               </Button>
             </Link>
-            <Button variant="ghost" size="icon" className="hidden lg:flex">
+            <Button variant="ghost" size="icon" className="hidden lg:flex" onClick={handleCartClick}>
               <ShoppingCart className="h-5 w-5" />
             </Button>
 
@@ -92,9 +98,8 @@ export const Navbar = () => {
               </div>
             )}
 
-            {/* Mobile Menu */}
             <div className="lg:hidden flex items-center gap-2">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" onClick={handleCartClick}>
                 <ShoppingCart className="h-5 w-5" />
               </Button>
               <Sheet>
