@@ -19,7 +19,7 @@ const Register = () => {
         setLoading(true);
 
         try {
-            const { error } = await supabase.auth.signUp({
+            const { error, data } = await supabase.auth.signUp({
                 email,
                 password,
                 options: {
@@ -30,13 +30,20 @@ const Register = () => {
             });
 
             if (error) {
-                toast.error(error.message);
-            } else {
-                toast.success("Compte créé avec succès ! Vérifiez votre email.");
+                console.error("Registration error:", error);
+                toast.error(`Échec de l'inscription : ${error.message}`);
+            } else if (data?.user && data?.session === null) {
+                toast.success("Compte créé ! Veuillez vérifier votre email pour confirmer votre inscription avant de vous connecter.", {
+                    duration: 10000,
+                });
                 navigate("/login");
+            } else {
+                toast.success("Inscription réussie !");
+                navigate("/");
             }
         } catch (error) {
-            toast.error("Une erreur est survenue lors de l'inscription.");
+            console.error("Unexpected registration error:", error);
+            toast.error("Une erreur inattendue est survenue lors de l'inscription. Vérifiez votre connexion et les clés Supabase.");
         } finally {
             setLoading(false);
         }

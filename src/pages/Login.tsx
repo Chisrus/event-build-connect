@@ -24,10 +24,11 @@ const Login = () => {
             });
 
             if (error) {
+                console.error("Login error:", error);
                 if (error.message.includes("Email not confirmed")) {
                     toast.error("Votre adresse email n'est pas encore confirmée. Veuillez vérifier votre boîte de réception.");
                 } else {
-                    toast.error(error.message);
+                    toast.error(`Échec de la connexion : ${error.message}`);
                 }
             } else {
                 toast.success("Connexion réussie !");
