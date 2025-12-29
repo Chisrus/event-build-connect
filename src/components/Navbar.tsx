@@ -69,7 +69,7 @@ export const Navbar = () => {
                 Publier une annonce
               </Button>
             </Link>
-            <Button variant="ghost" size="icon" className="hidden lg:flex" onClick={handleCartClick}>
+            <Button variant="ghost" size="icon" className="hidden xl:flex" onClick={handleCartClick}>
               <ShoppingCart className="h-5 w-5" />
             </Button>
 

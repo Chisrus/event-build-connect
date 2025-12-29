@@ -30,18 +30,18 @@ export const ProductCard = ({ product }: { product: Product }) => {
                     alt={product.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center p-6 gap-3">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center p-6 gap-3">
                     <Button
                         size="icon"
                         variant="secondary"
-                        className="rounded-full w-12 h-12 glass border-white/20 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75 hover:bg-white hover:text-primary"
+                        className="rounded-full w-12 h-12 glass border-white/20 translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-all duration-500 delay-75 hover:bg-white hover:text-primary"
                         onClick={handleAction}
                     >
                         <Eye className="h-5 w-5" />
                     </Button>
                     <Button
                         size="icon"
-                        className="rounded-full w-12 h-12 bg-accent text-white translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-150 hover:scale-110"
+                        className="rounded-full w-12 h-12 bg-accent text-white translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-all duration-500 delay-150 hover:scale-110"
                         onClick={handleAction}
                     >
                         <ShoppingCart className="h-5 w-5" />
