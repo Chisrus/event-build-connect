@@ -14,12 +14,28 @@ interface Product {
 }
 
 import { toast } from "sonner";
+import { useCart } from "@/contexts/CartContext";
 
 export const ProductCard = ({ product }: { product: Product }) => {
+    const { addItem, setIsOpen } = useCart();
     const formattedPrice = new Intl.NumberFormat('fr-FR').format(product.price || 0);
 
-    const handleAction = () => {
-        toast.info("Cette fonctionnalité de réservation sera bientôt disponible avec paiement sécurisé !");
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addItem({
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            image: product.images?.[0] || "/placeholder.svg",
+            category: product.category,
+        });
+    };
+
+    const handleViewDetails = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toast.info("Les détails du produit seront bientôt disponibles !");
     };
 
     return (
@@ -35,14 +51,14 @@ export const ProductCard = ({ product }: { product: Product }) => {
                         size="icon"
                         variant="secondary"
                         className="rounded-full w-12 h-12 glass border-white/20 translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-all duration-500 delay-75 hover:bg-white hover:text-primary"
-                        onClick={handleAction}
+                        onClick={handleViewDetails}
                     >
                         <Eye className="h-5 w-5" />
                     </Button>
                     <Button
                         size="icon"
                         className="rounded-full w-12 h-12 bg-accent text-white translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-all duration-500 delay-150 hover:scale-110"
-                        onClick={handleAction}
+                        onClick={handleAddToCart}
                     >
                         <ShoppingCart className="h-5 w-5" />
                     </Button>
@@ -70,7 +86,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
                         variant="ghost"
                         size="icon"
                         className="w-12 h-12 rounded-2xl bg-secondary hover:bg-accent hover:text-white transition-all duration-300"
-                        onClick={handleAction}
+                        onClick={handleAddToCart}
                     >
                         <PlusCircle className="h-6 w-6" />
                     </Button>

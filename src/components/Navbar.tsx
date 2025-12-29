@@ -7,8 +7,11 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 
+import { useCart } from "@/contexts/CartContext";
+
 export const Navbar = () => {
   const { user, signOut } = useAuth();
+  const { totalItems, setIsOpen } = useCart();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -18,7 +21,7 @@ export const Navbar = () => {
   };
 
   const handleCartClick = () => {
-    toast.info("Le panier sera disponible prochainement !");
+    setIsOpen(true);
   };
 
   const navLinks = [
@@ -69,8 +72,13 @@ export const Navbar = () => {
                 Publier une annonce
               </Button>
             </Link>
-            <Button variant="ghost" size="icon" className="hidden xl:flex" onClick={handleCartClick}>
+            <Button variant="ghost" size="icon" className="hidden xl:flex relative" onClick={handleCartClick}>
               <ShoppingCart className="h-5 w-5" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-accent text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg shadow-accent/40 animate-in zoom-in">
+                  {totalItems}
+                </span>
+              )}
             </Button>
 
             {user ? (
@@ -99,8 +107,13 @@ export const Navbar = () => {
             )}
 
             <div className="xl:hidden flex items-center gap-2">
-              <Button variant="ghost" size="icon" onClick={handleCartClick}>
+              <Button variant="ghost" size="icon" className="relative" onClick={handleCartClick}>
                 <ShoppingCart className="h-5 w-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg shadow-accent/40 animate-in zoom-in">
+                    {totalItems}
+                  </span>
+                )}
               </Button>
               <Sheet>
                 <SheetTrigger asChild>
