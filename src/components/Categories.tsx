@@ -1,5 +1,6 @@
 import { PartyPopper, HardHat } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export const Categories = () => {
   const categories = [
@@ -9,6 +10,7 @@ export const Categories = () => {
       description: "Tentes, chaises, sonorisation, décoration et tout le nécessaire pour vos événements",
       color: "from-accent/20 to-accent/5",
       iconColor: "text-accent",
+      path: "/event"
     },
     {
       icon: HardHat,
@@ -16,6 +18,7 @@ export const Categories = () => {
       description: "Outils professionnels, équipements de chantier et matériel de sécurité",
       color: "from-primary/20 to-primary/5",
       iconColor: "text-primary",
+      path: "/construction"
     },
   ];
 
@@ -47,9 +50,11 @@ export const Categories = () => {
               <p className="text-muted-foreground mb-6">
                 {category.description}
               </p>
-              <Button variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                Explorer
-              </Button>
+              <Link to={category.path}>
+                <Button variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  Explorer
+                </Button>
+              </Link>
             </div>
           ))}
         </div>

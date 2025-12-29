@@ -1,104 +1,74 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { ProductCard } from "./ProductCard";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import tentImage from "@/assets/tent-event.jpg";
-import soundImage from "@/assets/sound-system.jpg";
-import toolsImage from "@/assets/construction-tools.jpg";
-import chairsImage from "@/assets/chairs.jpg";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "react-router-dom";
 
 export const FeaturedProducts = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Tente Événementielle 6x6m",
-      category: "Événementiel",
-      price: "150€",
-      period: "/jour",
-      image: tentImage,
-      available: true,
-    },
-    {
-      id: 2,
-      name: "Système de Sonorisation Pro",
-      category: "Événementiel",
-      price: "200€",
-      period: "/jour",
-      image: soundImage,
-      available: true,
-    },
-    {
-      id: 3,
-      name: "Kit Outils de Construction",
-      category: "Construction",
-      price: "80€",
-      period: "/jour",
-      image: toolsImage,
-      available: true,
-    },
-    {
-      id: 4,
-      name: "Chaises Chiavari x50",
-      category: "Événementiel",
-      price: "120€",
-      period: "/jour",
-      image: chairsImage,
-      available: true,
-    },
-  ];
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .limit(4);
+
+      if (data) setProducts(data);
+      setLoading(false);
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-24 bg-background">
       <div className="container px-4">
         <div className="text-center mb-16 animate-fade-in">
+          <Badge className="mb-4 bg-primary/10 text-primary hover:bg-primary/20 border-none px-4 py-1">
+            Sélection Premium
+          </Badge>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
             Équipements Populaires
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Découvrez nos équipements les plus demandés, disponibles immédiatement
+            Découvrez nos équipements les plus demandés, disponibles immédiatement pour vos projets.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {products.map((product, index) => (
-            <Card
-              key={product.id}
-              className="group overflow-hidden border-border hover:border-primary/50 transition-all duration-300 hover:shadow-xl animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="relative overflow-hidden aspect-square">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground">
-                  {product.category}
-                </Badge>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+          {loading ? (
+            [1, 2, 3, 4].map((i) => (
+              <div key={i} className="space-y-4">
+                <Skeleton className="aspect-[4/5] w-full rounded-2xl" />
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-10 w-full" />
               </div>
-              <CardContent className="p-4">
-                <h3 className="font-semibold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">
-                  {product.name}
-                </h3>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-2xl font-bold text-primary">{product.price}</span>
-                  <span className="text-muted-foreground text-sm">{product.period}</span>
-                </div>
-              </CardContent>
-              <CardFooter className="p-4 pt-0">
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                  Réserver
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
+            ))
+          ) : (
+            products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          )}
         </div>
 
-        <div className="text-center mt-12">
-          <Button size="lg" variant="outline" className="hover:bg-primary hover:text-primary-foreground">
-            Voir tout le catalogue
-          </Button>
+        <div className="text-center mt-16">
+          <Link to="/catalog">
+            <Button size="lg" variant="outline" className="px-8 h-14 rounded-full border-2 hover:bg-primary hover:text-primary-foreground transition-all duration-300">
+              Voir tout le catalogue
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
   );
 };
+
+const Badge = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${className}`}>
+    {children}
+  </span>
+);

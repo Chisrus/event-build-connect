@@ -124,15 +124,15 @@ const Publish = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="price">Prix par jour (€)</Label>
+                        <Label htmlFor="price">Prix par jour (FCFA)</Label>
                         <Input
                             id="price"
                             type="number"
                             min="0"
-                            step="0.01"
+                            step="1"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            placeholder="0.00"
+                            placeholder="0"
                             required
                         />
                     </div>

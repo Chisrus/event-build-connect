@@ -3,14 +3,28 @@ import { Input } from "@/components/ui/input";
 import { Search, MapPin } from "lucide-react";
 import heroImage from "@/assets/hero-bg.jpg";
 
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 export const Hero = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/catalog?q=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      navigate('/catalog');
+    }
+  };
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
-          alt="Matériel événementiel et de construction" 
+        <img
+          src={heroImage}
+          alt="Matériel événementiel et de construction"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/75"></div>
@@ -23,32 +37,33 @@ export const Hero = () => {
             Location de Matériel Professionnel
           </h1>
           <p className="text-xl md:text-2xl text-primary-foreground/90 max-w-2xl mx-auto">
-            Votre plateforme de location de matériel événementiel et de construction. 
+            Votre plateforme de location de matériel événementiel et de construction.
             Simple, rapide et sécurisé.
           </p>
 
-          {/* Search Bar */}
-          <div className="bg-background/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl max-w-3xl mx-auto">
+          <form onSubmit={handleSearch} className="bg-background/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl max-w-3xl mx-auto">
             <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1 relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input 
-                  placeholder="Rechercher du matériel..." 
-                  className="pl-12 h-14 text-lg border-0 bg-muted/50"
+                <Input
+                  placeholder="Rechercher du matériel..."
+                  className="pl-12 h-14 text-lg border-0 bg-muted/50 focus-visible:ring-primary"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <div className="flex-1 relative">
                 <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input 
-                  placeholder="Localisation" 
-                  className="pl-12 h-14 text-lg border-0 bg-muted/50"
+                <Input
+                  placeholder="Localisation"
+                  className="pl-12 h-14 text-lg border-0 bg-muted/50 focus-visible:ring-primary"
                 />
               </div>
-              <Button size="lg" className="h-14 px-8 text-lg bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+              <Button type="submit" size="lg" className="h-14 px-8 text-lg bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
                 Rechercher
               </Button>
             </div>
-          </div>
+          </form>
 
         </div>
       </div>

@@ -9,9 +9,9 @@ export const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <img 
-              src={logo} 
-              alt="HM. BUILDING EVENT Logo" 
+            <img
+              src={logo}
+              alt="HM. BUILDING EVENT Logo"
               className="w-32 h-32 object-contain mb-4"
             />
             <p className="text-primary-foreground/80">

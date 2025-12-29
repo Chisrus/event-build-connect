@@ -1,29 +1,79 @@
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { ProductCard } from "@/components/ProductCard";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 const Catalog = () => {
+    const [searchParams] = useSearchParams();
+    const [products, setProducts] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const { data, error } = await supabase
+                .from('products')
+                .select('*');
+
+            if (data) setProducts(data);
+            setLoading(false);
+        };
+
+        fetchProducts();
+    }, []);
+
+    const filteredProducts = products.filter(p =>
+        p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className="min-h-screen bg-background">
             <Navbar />
             <div className="container mx-auto px-4 py-24">
-                <h1 className="text-4xl font-bold font-display mb-8">Catalogue Complet</h1>
-                <p className="text-muted-foreground mb-12">Découvrez l'ensemble de notre matériel disponible à la location.</p>
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                    <div className="animate-fade-in">
+                        <h1 className="text-4xl md:text-5xl font-bold font-display mb-4">Catalogue Complet</h1>
+                        <p className="text-muted-foreground text-lg">Découvrez l'ensemble de notre matériel disponible à la location.</p>
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Placeholder for real catalog items */}
-                    {[1, 2, 3, 4, 5, 6].map((item) => (
-                        <div key={item} className="bg-card rounded-lg border p-6 hover:shadow-lg transition-shadow">
-                            <div className="h-48 bg-muted rounded-md mb-4 flex items-center justify-center text-muted-foreground">
-                                Image Produit {item}
+                    <div className="relative w-full md:w-96 animate-fade-in">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input
+                            placeholder="Rechercher un équipement..."
+                            className="pl-10 h-12 rounded-full border-2 focus-visible:ring-primary"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {loading ? (
+                        [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                            <div key={i} className="space-y-4">
+                                <Skeleton className="aspect-[4/5] w-full rounded-2xl" />
+                                <Skeleton className="h-6 w-3/4" />
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-10 w-full" />
                             </div>
-                            <h3 className="text-xl font-bold mb-2">Produit {item}</h3>
-                            <p className="text-sm text-muted-foreground mb-4">Description courte du produit disponible à la location.</p>
-                            <div className="flex justify-between items-center">
-                                <span className="font-bold text-primary">À partir de 50€/jour</span>
-                                <button className="text-sm font-medium hover:underline">Voir détails</button>
-                            </div>
+                        ))
+                    ) : filteredProducts.length > 0 ? (
+                        filteredProducts.map((product) => (
+                            <ProductCard key={product.id} product={product} />
+                        ))
+                    ) : (
+                        <div className="col-span-full py-20 text-center animate-fade-in">
+                            <h3 className="text-2xl font-bold mb-2">Aucun résultat trouvé</h3>
+                            <p className="text-muted-foreground">Essayez d'ajuster vos critères de recherche.</p>
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
             <Footer />
