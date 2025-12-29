@@ -16,7 +16,7 @@ interface Product {
 import { toast } from "sonner";
 
 export const ProductCard = ({ product }: { product: Product }) => {
-    const formattedPrice = new Intl.NumberFormat('fr-FR').format(product.price);
+    const formattedPrice = new Intl.NumberFormat('fr-FR').format(product.price || 0);
 
     const handleAction = () => {
         toast.info("Cette fonctionnalité de réservation sera bientôt disponible avec paiement sécurisé !");
