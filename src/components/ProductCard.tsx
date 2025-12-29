@@ -14,15 +14,26 @@ interface Product {
 }
 
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 
 export const ProductCard = ({ product }: { product: Product }) => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const { addItem, setIsOpen } = useCart();
     const formattedPrice = new Intl.NumberFormat('fr-FR').format(product.price || 0);
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+
+        if (!user) {
+            toast.info("Veuillez vous inscrire pour ajouter des articles au panier.");
+            navigate("/register");
+            return;
+        }
+
         addItem({
             id: product.id,
             title: product.title,

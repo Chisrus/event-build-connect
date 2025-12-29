@@ -24,6 +24,16 @@ export const Navbar = () => {
     setIsOpen(true);
   };
 
+  const handlePublishClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!user) {
+      toast.info("Veuillez vous inscrire pour publier une annonce.");
+      navigate("/register");
+    } else {
+      navigate("/publish");
+    }
+  };
+
   const navLinks = [
     { name: "Accueil", path: "/", icon: Home },
     { name: "Événementiel", path: "/event", icon: PartyPopper },
@@ -66,12 +76,10 @@ export const Navbar = () => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
-            <Link to="/publish">
-              <Button className="hidden md:flex gap-2 bg-primary hover:bg-primary/90">
-                <PlusCircle className="h-4 w-4" />
-                Publier une annonce
-              </Button>
-            </Link>
+            <Button onClick={handlePublishClick} className="hidden md:flex gap-2 bg-primary hover:bg-primary/90">
+              <PlusCircle className="h-4 w-4" />
+              Publier une annonce
+            </Button>
             <Button variant="ghost" size="icon" className="hidden xl:flex relative" onClick={handleCartClick}>
               <ShoppingCart className="h-5 w-5" />
               {totalItems > 0 && (
@@ -164,12 +172,10 @@ export const Navbar = () => {
                         </>
                       )}
                     </div>
-                    <Link to="/publish" className="mt-4">
-                      <Button className="w-full gap-2 bg-primary">
-                        <PlusCircle className="h-4 w-4" />
-                        Publier une annonce
-                      </Button>
-                    </Link>
+                    <Button onClick={handlePublishClick} className="mt-4 w-full gap-2 bg-primary">
+                      <PlusCircle className="h-4 w-4" />
+                      Publier une annonce
+                    </Button>
                   </div>
                 </SheetContent>
               </Sheet>
