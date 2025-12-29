@@ -11,13 +11,19 @@ export const FeaturedProducts = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .limit(4);
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .limit(4);
 
-      if (data) setProducts(data);
-      setLoading(false);
+        if (error) throw error;
+        if (data) setProducts(data);
+      } catch (err) {
+        console.error("Error fetching featured products:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchProducts();

@@ -16,12 +16,18 @@ const Catalog = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const { data, error } = await supabase
-                .from('products')
-                .select('*');
+            try {
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*');
 
-            if (data) setProducts(data);
-            setLoading(false);
+                if (error) throw error;
+                if (data) setProducts(data);
+            } catch (err) {
+                console.error("Error fetching catalog products:", err);
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchProducts();
