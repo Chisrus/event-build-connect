@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Eye, ShoppingCart } from "lucide-react";
+import { Eye, ShoppingCart, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface Product {
@@ -11,6 +11,7 @@ interface Product {
     price: number;
     images: string[];
     description: string;
+    location?: string;
 }
 
 import { toast } from "sonner";
@@ -103,10 +104,12 @@ export const ProductCard = ({ product }: { product: Product }) => {
                     </Button>
                 </div>
             </CardContent>
-            <CardFooter className="px-6 pb-8 pt-0">
-                {/* Optional button if we want more secondary action */}
-            </CardFooter>
-        </Card>
+            <div className="flex items-center gap-2 mt-4 text-xs font-medium text-muted-foreground bg-secondary/50 p-2 rounded-lg">
+                <MapPin className="h-4 w-4 text-accent" />
+                <span className="truncate">{product.location || "Localisation non spécifiée"}</span>
+            </div>
+        </CardFooter>
+        </Card >
     );
 };
 

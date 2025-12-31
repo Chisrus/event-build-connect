@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { Camera, MapPin, X } from "lucide-react";
 
 const Publish = () => {
     const navigate = useNavigate();
@@ -22,6 +23,76 @@ const Publish = () => {
     const [price, setPrice] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState<File | null>(null);
+    const [location, setLocation] = useState("");
+    const [isCameraOpen, setIsCameraOpen] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+
+    const startCamera = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            streamRef.current = stream;
+            setIsCameraOpen(true);
+            setTimeout(() => {
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                }
+            }, 100);
+        } catch (err) {
+            console.error("Error accessing camera:", err);
+            toast.error("Impossible d'accéder à la caméra. Vérifiez vos permissions.");
+        }
+    };
+
+    const capturePhoto = () => {
+        if (videoRef.current && canvasRef.current) {
+            const video = videoRef.current;
+            const canvas = canvasRef.current;
+            const context = canvas.getContext('2d');
+
+            if (context) {
+                // Set canvas dimensions to match video
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                // Draw video frame to canvas
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Convert to blob/file
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const file = new File([blob], "captured-photo.jpg", { type: "image/jpeg" });
+                        setImage(file);
+                        setPreviewUrl(URL.createObjectURL(blob));
+                        stopCamera();
+                    }
+                }, 'image/jpeg', 0.8);
+            }
+        }
+    };
+
+    const stopCamera = () => {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+        }
+        setIsCameraOpen(false);
+    };
+
+    const resetCamera = () => {
+        setImage(null);
+        setPreviewUrl(null);
+        startCamera();
+    };
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            stopCamera();
+        };
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,8 +102,13 @@ const Publish = () => {
             return;
         }
 
-        if (!title || !category || !price || !description) {
-            toast.error("Veuillez remplir tous les champs obligatoires");
+        if (!title || !category || !price || !description || !location) {
+            toast.error("Veuillez remplir tous les champs obligatoires, y compris la localisation");
+            return;
+        }
+
+        if (!image) {
+            toast.error("Une photo est requise pour plus de transparence");
             return;
         }
 
@@ -71,6 +147,7 @@ const Publish = () => {
                     price: parseFloat(price),
                     description,
                     images: imageUrl ? [imageUrl] : [],
+                    location: location,
                     user_id: user.id
                 });
 
@@ -150,14 +227,70 @@ const Publish = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="images">Photos</Label>
-                        <Input
-                            id="images"
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
-                            className="cursor-pointer"
-                        />
+                        <Label htmlFor="location">Localisation (Ville, Quartier)</Label>
+                        <div className="relative">
+                            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                id="location"
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
+                                placeholder="Ex: Douala, Bonapriso"
+                                className="pl-10"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <Label>Photo du produit</Label>
+                        <div className="border-2 border-dashed border-input rounded-lg p-6 flex flex-col items-center gap-4 bg-muted/20">
+                            {previewUrl ? (
+                                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black">
+                                    <img src={previewUrl} alt="Preview" className="w-full h-full object-contain" />
+                                    <Button
+                                        type="button"
+                                        variant="destructive"
+                                        size="icon"
+                                        className="absolute top-2 right-2 rounded-full"
+                                        onClick={resetCamera}
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ) : isCameraOpen ? (
+                                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black">
+                                    <video
+                                        ref={videoRef}
+                                        autoPlay
+                                        playsInline
+                                        className="w-full h-full object-contain"
+                                    />
+                                    <Button
+                                        type="button"
+                                        className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full px-8 py-6 shadow-lg animate-pulse bg-red-600 hover:bg-red-700 border-4 border-white"
+                                        onClick={capturePhoto}
+                                    >
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div className="text-center space-y-4">
+                                    <div className="mx-auto w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
+                                        <Camera className="h-8 w-8 text-primary" />
+                                    </div>
+                                    <div>
+                                        <p className="font-medium">Prendre une photo</p>
+                                        <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                                            Pour plus de transparence, veuillez prendre une photo directe de votre article.
+                                        </p>
+                                    </div>
+                                    <Button type="button" onClick={startCamera}>
+                                        <Camera className="mr-2 h-4 w-4" />
+                                        Ouvrir la caméra
+                                    </Button>
+                                    <canvas ref={canvasRef} className="hidden" />
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="pt-4 flex gap-4">
