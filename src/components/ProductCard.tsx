@@ -4,15 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, ShoppingCart, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
-interface Product {
-    id: string;
-    title: string;
-    category: string;
-    price: number;
-    images: string[];
-    description: string;
-    location?: string;
-}
+import { Product } from "@/types";
 
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -45,9 +37,9 @@ export const ProductCard = ({ product }: { product: Product }) => {
     };
 
     const handleViewDetails = (e: React.MouseEvent) => {
-        e.preventDefault();
+        // e.preventDefault(); // Don't prevent default if wrapping in Link, but here we use useNavigate or button
         e.stopPropagation();
-        toast.info("Les détails du produit seront bientôt disponibles !");
+        navigate(`/product/${product.id}`);
     };
 
     return (

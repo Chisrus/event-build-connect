@@ -11,6 +11,7 @@ import Catalog from "./pages/Catalog";
 import Event from "./pages/Event";
 import Construction from "./pages/Construction";
 import Publish from "./pages/Publish";
+import ProductDetails from "./pages/ProductDetails";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/event" element={<Event />} />
               <Route path="/construction" element={<Construction />} />
               <Route path="/publish" element={<Publish />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
