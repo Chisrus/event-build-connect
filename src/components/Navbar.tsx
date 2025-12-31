@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Menu, User, ShoppingCart, PlusCircle, LogOut, Home, Grid, HardHat, PartyPopper, Phone } from "lucide-react";
+import { Menu, User, ShoppingCart, PlusCircle, LogOut, Home, Grid, HardHat, PartyPopper, Phone, LayoutDashboard } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -91,6 +91,12 @@ export const Navbar = () => {
 
             {user ? (
               <div className="hidden xl:flex items-center gap-2">
+                <Link to="/dashboard">
+                  <Button variant="ghost" className="flex">
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Tableau de bord
+                  </Button>
+                </Link>
                 <Button variant="outline" className="flex">
                   <User className="h-4 w-4 mr-2" />
                   Profil
@@ -153,6 +159,13 @@ export const Navbar = () => {
                           <div className="flex items-center gap-4 text-lg font-medium py-2 text-muted-foreground italic">
                             <User className="h-5 w-5" /> {user.email}
                           </div>
+                          <Link
+                            to="/dashboard"
+                            className="flex items-center gap-4 text-lg font-medium text-foreground hover:text-primary transition-colors py-2"
+                          >
+                            <LayoutDashboard className="h-5 w-5" />
+                            Tableau de bord
+                          </Link>
                           <Button
                             variant="destructive"
                             className="w-full justify-start gap-4"

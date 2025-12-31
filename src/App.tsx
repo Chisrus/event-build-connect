@@ -1,3 +1,6 @@
+/**
+ * Author: chisrus_dev (dark_chisrus)
+ */
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +11,7 @@ import Catalog from "./pages/Catalog";
 import Event from "./pages/Event";
 import Construction from "./pages/Construction";
 import Publish from "./pages/Publish";
+import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
@@ -32,6 +36,7 @@ const App = () => (
               <Route path="/event" element={<Event />} />
               <Route path="/construction" element={<Construction />} />
               <Route path="/publish" element={<Publish />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
