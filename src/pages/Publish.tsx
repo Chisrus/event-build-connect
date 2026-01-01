@@ -10,7 +10,8 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Camera, MapPin, X } from "lucide-react";
+import { Camera, MapPin, X, Navigation } from "lucide-react";
+import { getUserLocation } from "@/utils/geolocation";
 
 const Publish = () => {
     const navigate = useNavigate();
@@ -24,6 +25,8 @@ const Publish = () => {
     const [description, setDescription] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [location, setLocation] = useState("");
+    const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
+    const [isLocating, setIsLocating] = useState(false);
     const [isCameraOpen, setIsCameraOpen] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -94,6 +97,21 @@ const Publish = () => {
         };
     }, []);
 
+    const handleGetLocation = async () => {
+        setIsLocating(true);
+        try {
+            const coords = await getUserLocation();
+            setCoordinates(coords);
+            toast.success("Position localisée avec succès !");
+            // Optional: You could use a reverse geocoding API here to fill the text location
+        } catch (error: any) {
+            console.error("Error getting location:", error);
+            toast.error("Impossible de récupérer votre position. Vérifiez que la localisation est activée.");
+        } finally {
+            setIsLocating(false);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -148,6 +166,8 @@ const Publish = () => {
                     description,
                     images: imageUrl ? [imageUrl] : [],
                     location: location,
+                    latitude: coordinates?.latitude,
+                    longitude: coordinates?.longitude,
                     user_id: user.id
                 });
 
@@ -239,6 +259,18 @@ const Publish = () => {
                                 required
                             />
                         </div>
+                    </div>
+                    <div className="flex justify-end mt-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={handleGetLocation}
+                            disabled={isLocating}
+                        >
+                            <Navigation className="mr-2 h-4 w-4" />
+                            {isLocating ? "Localisation..." : coordinates ? "Position enregistrée" : "Utiliser ma position actuelle"}
+                        </Button>
                     </div>
 
                     <div className="space-y-4">

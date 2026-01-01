@@ -8,7 +8,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Map, Grid as GridIcon, Search } from "lucide-react";
+import { Map, Grid as GridIcon, Search, Navigation } from "lucide-react";
+import { calculateDistance, getUserLocation } from "@/utils/geolocation";
+import { toast } from "sonner";
 
 const Catalog = () => {
     const [searchParams] = useSearchParams();
@@ -18,6 +20,8 @@ const Catalog = () => {
     const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
     const [priceRange, setPriceRange] = useState([0, 1000000]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [userCoords, setUserCoords] = useState<{ latitude: number; longitude: number } | null>(null);
+    const [sortByDistance, setSortByDistance] = useState(false);
 
     const categories = ["Construction", "Événementiel", "Logistique", "Autre"];
 
@@ -40,6 +44,20 @@ const Catalog = () => {
         fetchProducts();
     }, []);
 
+
+
+    const handleEnableLocation = async () => {
+        try {
+            const coords = await getUserLocation();
+            setUserCoords(coords);
+            setSortByDistance(true);
+            toast.success("Localisation activée. Les produits les plus proches sont affichés en premier.");
+        } catch (error) {
+            console.error(error);
+            toast.error("Impossible d'accéder à votre position.");
+        }
+    };
+
     const filteredProducts = products.filter(p => {
         const matchesSearch = (p.title?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
             (p.category?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
@@ -49,6 +67,13 @@ const Catalog = () => {
         const matchesCategory = selectedCategory ? p.category === selectedCategory : true;
 
         return matchesSearch && matchesPrice && matchesCategory;
+    }).sort((a, b) => {
+        if (sortByDistance && userCoords && a.latitude && a.longitude && b.latitude && b.longitude) {
+            const distA = calculateDistance(userCoords.latitude, userCoords.longitude, a.latitude, a.longitude);
+            const distB = calculateDistance(userCoords.latitude, userCoords.longitude, b.latitude, b.longitude);
+            return distA - distB;
+        }
+        return 0; // Default order
     });
 
     return (
@@ -70,6 +95,17 @@ const Catalog = () => {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
+                    </div>
+
+                    <div className="flex justify-end">
+                        <Button
+                            variant={sortByDistance ? "default" : "outline"}
+                            onClick={() => sortByDistance ? setSortByDistance(false) : handleEnableLocation()}
+                            className="gap-2"
+                        >
+                            <Navigation className="h-4 w-4" />
+                            {sortByDistance ? "Tri par proximité activé" : "Trier par proximité"}
+                        </Button>
                     </div>
 
                     {/* Filters Bar */}
