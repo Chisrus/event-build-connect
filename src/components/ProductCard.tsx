@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 
-export const ProductCard = ({ product }: { product: Product }) => {
+export const ProductCard = ({ product, distance }: { product: Product; distance?: number }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const { addItem, setIsOpen } = useCart();
@@ -99,7 +99,14 @@ export const ProductCard = ({ product }: { product: Product }) => {
             <CardFooter className="px-6 pb-8 pt-0 flex flex-col items-start">
                 <div className="flex items-center gap-2 mt-4 text-xs font-medium text-muted-foreground bg-secondary/50 p-2 rounded-lg w-full">
                     <MapPin className="h-4 w-4 text-accent" />
-                    <span className="truncate">{product.location || "Localisation non spécifiée"}</span>
+                    <span className="truncate">
+                        {product.location || "Localisation non spécifiée"}
+                        {distance !== undefined && (
+                            <span className="ml-2 font-bold text-primary">
+                                • {distance < 1 ? `${Math.round(distance * 1000)} m` : `${distance.toFixed(1)} km`}
+                            </span>
+                        )}
+                    </span>
                 </div>
             </CardFooter>
         </Card>

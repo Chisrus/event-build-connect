@@ -76,6 +76,14 @@ const Catalog = () => {
         return 0; // Default order
     });
 
+    const productsWithDistance = filteredProducts.map(p => {
+        let distance = undefined;
+        if (userCoords && p.latitude && p.longitude) {
+            distance = calculateDistance(userCoords.latitude, userCoords.longitude, p.latitude, p.longitude);
+        }
+        return { ...p, distance };
+    });
+
     return (
         <div className="min-h-screen bg-background">
             <Navbar />
@@ -189,8 +197,8 @@ const Catalog = () => {
                                 </div>
                             ))
                         ) : filteredProducts.length > 0 ? (
-                            filteredProducts.map((product) => (
-                                <ProductCard key={product.id} product={product} />
+                            productsWithDistance.map((product) => (
+                                <ProductCard key={product.id} product={product} distance={product.distance} />
                             ))
                         ) : (
                             <div className="col-span-full py-20 text-center animate-fade-in">
