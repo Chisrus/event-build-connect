@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Camera, MapPin, X, Navigation } from "lucide-react";
+import { Image, MapPin, X, Navigation, Upload } from "lucide-react";
 import { getUserLocation } from "@/utils/geolocation";
 
 const Publish = () => {
@@ -27,75 +27,35 @@ const Publish = () => {
     const [location, setLocation] = useState("");
     const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
     const [isLocating, setIsLocating] = useState(false);
-    const [isCameraOpen, setIsCameraOpen] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const streamRef = useRef<MediaStream | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const startCamera = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-            streamRef.current = stream;
-            setIsCameraOpen(true);
-            setTimeout(() => {
-                if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
-                }
-            }, 100);
-        } catch (err) {
-            console.error("Error accessing camera:", err);
-            toast.error("Impossible d'accéder à la caméra. Vérifiez vos permissions.");
-        }
-    };
-
-    const capturePhoto = () => {
-        if (videoRef.current && canvasRef.current) {
-            const video = videoRef.current;
-            const canvas = canvasRef.current;
-            const context = canvas.getContext('2d');
-
-            if (context) {
-                // Set canvas dimensions to match video
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-
-                // Draw video frame to canvas
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                // Convert to blob/file
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        const file = new File([blob], "captured-photo.jpg", { type: "image/jpeg" });
-                        setImage(file);
-                        setPreviewUrl(URL.createObjectURL(blob));
-                        stopCamera();
-                    }
-                }, 'image/jpeg', 0.8);
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                toast.error("L'image est trop volumineuse (max 5Mo)");
+                return;
             }
+            setImage(file);
+            setPreviewUrl(URL.createObjectURL(file));
         }
     };
 
-    const stopCamera = () => {
-        if (streamRef.current) {
-            streamRef.current.getTracks().forEach(track => track.stop());
-            streamRef.current = null;
-        }
-        setIsCameraOpen(false);
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
     };
 
-    const resetCamera = () => {
+    const removeImage = () => {
         setImage(null);
+        if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+        }
         setPreviewUrl(null);
-        startCamera();
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
     };
-
-    // Cleanup on unmount
-    useEffect(() => {
-        return () => {
-            stopCamera();
-        };
-    }, []);
 
     const handleGetLocation = async () => {
         setIsLocating(true);
@@ -275,51 +235,49 @@ const Publish = () => {
 
                     <div className="space-y-4">
                         <Label>Photo du produit</Label>
-                        <div className="border-2 border-dashed border-input rounded-lg p-6 flex flex-col items-center gap-4 bg-muted/20">
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                        />
+                        <div
+                            className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center gap-4 transition-colors ${previewUrl ? 'border-primary/50 bg-primary/5' : 'border-input bg-muted/20 hover:bg-muted/30 cursor-pointer'
+                                }`}
+                            onClick={!previewUrl ? handleUploadClick : undefined}
+                        >
                             {previewUrl ? (
-                                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black">
+                                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black/5">
                                     <img src={previewUrl} alt="Preview" className="w-full h-full object-contain" />
                                     <Button
                                         type="button"
                                         variant="destructive"
                                         size="icon"
                                         className="absolute top-2 right-2 rounded-full"
-                                        onClick={resetCamera}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            removeImage();
+                                        }}
                                     >
                                         <X className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            ) : isCameraOpen ? (
-                                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black">
-                                    <video
-                                        ref={videoRef}
-                                        autoPlay
-                                        playsInline
-                                        className="w-full h-full object-contain"
-                                    />
-                                    <Button
-                                        type="button"
-                                        className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full px-8 py-6 shadow-lg animate-pulse bg-red-600 hover:bg-red-700 border-4 border-white"
-                                        onClick={capturePhoto}
-                                    >
                                     </Button>
                                 </div>
                             ) : (
                                 <div className="text-center space-y-4">
                                     <div className="mx-auto w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
-                                        <Camera className="h-8 w-8 text-primary" />
+                                        <Upload className="h-8 w-8 text-primary" />
                                     </div>
                                     <div>
-                                        <p className="font-medium">Prendre une photo</p>
+                                        <p className="font-medium">Importer une image</p>
                                         <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-                                            Pour plus de transparence, veuillez prendre une photo directe de votre article.
+                                            Cliquez ou glissez une photo de votre article ici (PNG, JPG, max 5Mo).
                                         </p>
                                     </div>
-                                    <Button type="button" onClick={startCamera}>
-                                        <Camera className="mr-2 h-4 w-4" />
-                                        Ouvrir la caméra
+                                    <Button type="button" variant="outline" onClick={handleUploadClick}>
+                                        <Image className="mr-2 h-4 w-4" />
+                                        Choisir un fichier
                                     </Button>
-                                    <canvas ref={canvasRef} className="hidden" />
                                 </div>
                             )}
                         </div>
