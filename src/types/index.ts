@@ -16,22 +16,20 @@ export interface Booking {
     id: string;
     product_id: string;
     renter_id: string;
+    owner_id: string;
     start_date: string;
     end_date: string;
-    status: 'pending' | 'confirmed' | 'cancelled';
+    status: string;
     total_price: number;
     created_at: string;
-    product?: Product; // For joined queries
+    product?: Product;
 }
 
 export interface Review {
     id: string;
     product_id: string;
-    reviewer_id: string;
-    rating: number; // 1-5
-    comment: string;
+    user_id: string;
+    rating: number;
+    comment: string | null;
     created_at: string;
-    reviewer?: {
-        display_name: string; // Or email if profile not set
-    };
 }

@@ -122,6 +122,7 @@ const ProductDetails = () => {
                 .insert({
                     product_id: product.id,
                     renter_id: user.id,
+                    owner_id: product.user_id,
                     start_date: format(date.from, 'yyyy-MM-dd'),
                     end_date: format(date.to, 'yyyy-MM-dd'),
                     total_price: totalPrice,
