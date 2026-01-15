@@ -1,6 +1,7 @@
 /**
  * Author: chisrus_dev (dark_chisrus)
  * Application: HM. BUILDING EVENT
+ * Build: v1.0.1
  */
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
